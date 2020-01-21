@@ -22,3 +22,13 @@ See the [Wiki](https://github.com/IngoClemens/iDeform/wiki) for full details.
 
 ## Building
 To build with cmake see the [Building](https://github.com/IngoClemens/iDeform/wiki/Building) page.
+
+## Linux Compile Instructions For Maya 2020
+
+export CC="/sw/pkg/gcc/6.3.1/bin/gcc"
+
+export DEVKIT_LOCATION="/sw/pkg/maya/2020/maya2020/devkit"
+
+cmake -H. -Bbuild -G "Unix Makefiles"
+
+cmake --build build/
