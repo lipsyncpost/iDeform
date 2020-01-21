@@ -1,28 +1,27 @@
-# Define project
-cmake_minimum_required(VERSION 3.3)
-project(iDeform VERSION 2.0.0)
+#-
+# ==========================================================================
+# Copyright (c) 2018 Autodesk, Inc.
+# All rights reserved.
+# 
+# These coded instructions, statements, and computer programs contain
+# unpublished proprietary information written by Autodesk, Inc., and are
+# protected by Federal copyright law. They may not be disclosed to third
+# parties or copied or duplicated in any form, in whole or in part, without
+# the prior written consent of Autodesk, Inc.
+# ==========================================================================
+#+
 
-# Set project version macro
-add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
 
-# Set default Maya version
-if(NOT DEFINED MAYA_VERSION)
-    set(MAYA_VERSION 2018)
-endif()
+cmake_minimum_required(VERSION 2.8)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-find_package(Maya REQUIRED)
+# include the project setting file
+include($ENV{DEVKIT_LOCATION}/cmake/pluginEntry.cmake)
 
-# Set compile flags
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# specify project name
+set(PROJECT_NAME iDeform)
 
-if(WIN32)
-    add_compile_options(/wd4068 /EHsc)
-endif()
-
-# Create target
-add_library(iDeform SHARED
+# set SOURCE_FILES
+set(SOURCE_FILES
     source/iCollide.h
     source/iCollide.cpp
     source/iDisplace.h
@@ -31,15 +30,10 @@ add_library(iDeform SHARED
     source/iSkinDeform.cpp
     source/pluginMain.cpp)
 
-include_directories(${MAYA_INCLUDE_DIR})
-link_directories(${MAYA_LIBRARY_DIR})
+# set linking libraries
+set(LIBRARIES
+     OpenMaya Foundation OpenMayaAnim OpenMayaFX OpenMayaRender OpenMayaUI
+)
 
-target_link_libraries(iDeform ${MAYA_LIBRARIES})
-set_target_properties(iDeform PROPERTIES
-    COMPILE_DEFINITIONS "${MAYA_COMPILE_DEFINITIONS}"
-    PREFIX ""
-    SUFFIX ${MAYA_PLUGIN_EXT})
-
-if(WIN32)
-    set_target_properties(iDeform PROPERTIES LINK_FLAGS "/export:initializePlugin /export:uninitializePlugin")
-endif()
+# Build plugin
+build_plugin()
